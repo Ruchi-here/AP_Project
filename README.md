@@ -22,5 +22,5 @@ The following guidelines should be followed when writing classes and methods in 
 6. **Naming Conventions**
    - Follow established naming conventions for classes, fields, methods, objects, and variables, including constants. Consistency in naming enhances code readability and maintainability.
 
-** JUnit tests should be included in your submission **
+**JUnit tests should be included in your submission**
 
