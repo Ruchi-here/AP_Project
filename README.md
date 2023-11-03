@@ -1,10 +1,27 @@
 # AP_Project
 
-**Good programming practices**
-All the fields in the class should be private unless there is a good reason to have otherwise.
-Every field should have a getter and a setter.
-All the methods of the class should be public unless there is a good reason to have otherwise (for example, helper methods need not be public).
-Every class should be public.
-Add comments to the class and methods except the getter and setter methods.
-Follow the naming conventions for classes, fields, methods, objects, and variables (including constants). 
+# Code Style Guidelines
+
+The following guidelines should be followed when writing classes and methods in this project:
+
+1. **Field Encapsulation**
+   - All fields in a class should be declared as private unless there's a compelling reason to do otherwise.
+
+2. **Getter and Setter Methods**
+   - Every field should have a corresponding getter and setter method, allowing controlled access to the data.
+
+3. **Method Accessibility**
+   - All methods of a class should be declared as public unless they serve as internal helper methods or have specific reasons to be otherwise.
+
+4. **Class Visibility**
+   - Every class in the project should be declared as public to ensure it can be accessed when needed.
+
+5. **Comments**
+   - Add comments to classes and methods to provide meaningful descriptions and explanations of their purpose and functionality. Exclude comments for getter and setter methods unless they contain unique logic.
+
+6. **Naming Conventions**
+   - Follow established naming conventions for classes, fields, methods, objects, and variables, including constants. Consistency in naming enhances code readability and maintainability.
+
+By adhering to these guidelines, you can ensure code consistency, maintainability, and readability throughout the project.
+
 
