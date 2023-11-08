@@ -28,3 +28,4 @@ The following guidelines should be followed when writing classes and methods in 
 Feature idea (Bonus)
 1. (Add) Obstacle (up and down)
 2. Jump
+3. Music
