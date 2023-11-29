@@ -24,6 +24,10 @@ The following guidelines should be followed when writing classes and methods in 
 
 **JUnit tests should be included in your submission**
 
+BONUS Compnents (Resources)
+
+Porting from JavaFX to Android - https://www.youtube.com/watch?v=gVOKAYz0gK4
+
 
 Feature idea (Bonus)
 1. (Add) Obstacle (up and down)
