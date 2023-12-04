@@ -1,0 +1,126 @@
+package com.example.game3;
+
+import javafx.animation.AnimationTimer;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+public class Controller implements Initializable {
+    @FXML
+    public ImageView runner;
+    AnimationTimer gameLoop;
+    MediaPlayer mediaPlayer;
+
+    @FXML
+    private AnchorPane plane;
+
+    @FXML
+    private Text score;
+    private double stickLength = 0;
+
+    private Bird birdComponent;
+    private MovementController movementController = new MovementController();
+    private boolean isLeftKeyPressed = false;
+    private boolean isRightKeyPressed = false;
+    private boolean isUpKeyPressed = false;
+    private boolean isDownKeyPressed = false;
+
+    private int gameTime = 0;
+    private int scoreCounter = 0;
+
+    private Map<KeyCode, Long> keyPressTimeMap = new HashMap<>();
+    private Rectangle stick;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // Add 4 rectangles to the bottom of the screen
+        // Add 4 rectangles to the bottom of the screen
+        addRectangleWithDot(0, 400, 90, 100, Color.BLACK);
+        addRectangleWithDot(200, 400, 80, 100, Color.BLACK);
+        addRectangleWithDot(350, 400, 120, 100, Color.BLACK);
+        addRectangleWithDot(500, 400, 90, 100, Color.BLACK);
+        runner.setLayoutX(0);
+        runner.setLayoutY(290);
+
+        //birdComponent = new Bird(); // Assuming Bird constructor requires no parameters
+        //movementController.makeMovable(birdComponent, plane);
+
+
+
+        gameLoop = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                update();
+            }
+        };
+
+        gameLoop.start();
+        playMusic();
+    }
+
+    private void playMusic() {
+        String musicPath = "music.mp3";
+
+        // Create a Media object
+        Media media = new Media(getClass().getResource("/" + musicPath).toExternalForm());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
+    }
+
+    @FXML
+    private void update() {
+        gameTime++;
+
+        // Your game update logic here
+
+        // Example: Update score if some condition is met
+        if (gameTime % 60 == 0) { // Update score every second (assuming 60 frames per second)
+            scoreCounter++;
+            score.setText(String.valueOf(scoreCounter));
+        }
+    }
+
+    @FXML
+    void pressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.SPACE) {
+            stickLength += 10; // Increase stick length by 10 units
+            createAndAddRectangle(70, 400, stickLength, 5, Color.BLUE); // Create a horizontal line
+            runner.setLayoutX(stickLength);
+            runner.setLayoutY(290);
+
+            // Print the updated position of the runner
+            System.out.println("Runner X: " + runner.getLayoutX());
+            System.out.println("Runner Y: " + runner.getLayoutY());
+        }
+    }
+
+    private void createAndAddRectangle(double x, double y, double width, double height, Color color) {
+        Rectangle rectangle = new Rectangle(x, y, width, height);
+        rectangle.setFill(color);
+        plane.getChildren().add(rectangle);
+    }
+
+    private void addRectangleWithDot(double x, double y, double width, double height, Color color) {
+        createAndAddRectangle(x, y, width, height, color);
+
+        // Add a dot at the top of the rectangle
+        Rectangle dot = new Rectangle(x + width / 2 - 2, y - 2, 10, 10); // Adjust the position based on the rectangle dimensions
+        dot.setFill(Color.RED); // You can set the color of the dot as per your requirement
+        plane.getChildren().add(dot);
+    }
+}
