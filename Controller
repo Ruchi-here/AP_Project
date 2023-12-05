@@ -1,9 +1,13 @@
+
 package com.example.game3;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -13,7 +17,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -22,6 +28,8 @@ public class Controller implements Initializable {
     public ImageView runner;
     AnimationTimer gameLoop;
     MediaPlayer mediaPlayer;
+    private boolean gameOverDisplayed = false;
+
 
     @FXML
     private AnchorPane plane;
@@ -51,8 +59,6 @@ public class Controller implements Initializable {
 
     private Map<KeyCode, Long> keyPressTimeMap = new HashMap<>();
     private List<Rectangle> redDots = new ArrayList<>();
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Add 4 rectangles to the bottom of the screen
@@ -62,14 +68,17 @@ public class Controller implements Initializable {
         addRectangle(rectangle3StartX, 400, 70, 200, Color.BLACK);
 
 
+        // we can use inheritance in cherry class
         Rectangle redDot1 = addRectangleCherry(rectangle1EndX + 30, 420, 10, 10, Color.RED);
         Rectangle redDot2 = addRectangleCherry(rectangle2EndX + 40, 420, 10, 10, Color.RED);
         Rectangle redDot3 = addRectangleCherry(rectangle3EndX + 60, 420, 10, 10, Color.RED);
+
 
         // Add red dots to the list
         redDots.add(redDot1);
         redDots.add(redDot2);
         redDots.add(redDot3);
+
 
         player = new Player(runner, rectangle1StartX, 345);
 
@@ -135,36 +144,39 @@ public class Controller implements Initializable {
             double startY = 0;
             double endY = 0;
 
+            List<Double> redDotStartYList = Arrays.asList(redDot1StartY, redDot2StartY, redDot3StartY);
+            List<Double> redDotEndYList = Arrays.asList(redDot1EndY, redDot2EndY, redDot3EndY);
+
             switch (i) {
                 case 0:
                     startX = rectangle1StartX;
                     endX = rectangle1EndX;
-                    startY = redDot1StartY;
-                    endY = redDot1EndY;
+                    startY = redDotStartYList.get(i);
+                    endY =redDotEndYList.get(i);
                     break;
                 case 1:
                     startX = rectangle2StartX;
                     endX = rectangle2EndX;
-                    startY = redDot2StartY;
-                    endY = redDot2EndY;
+                    startY = redDotStartYList.get(i);
+                    endY = redDotEndYList.get(i);
                     break;
                 case 2:
                     startX = rectangle3StartX;
                     endX = rectangle3EndX;
-                    startY = redDot3StartY;
-                    endY = redDot3EndY;
+                    startY = redDotStartYList.get(i);
+                    endY = redDotEndYList.get(i);
                     break;
             }
 
             // Check if player is within the X range of the rectangle
-            if (isPointInsideRectangle(playerX,playerY,startX, startY, endX, endY)) {
+            if (isPointInsideRectangle(playerX, playerY, startX, startY, endX, endY)) {
                 System.out.println("Yes2");
                 playerInsideRectangle = true;
 
                 // Check if the score has not been updated for this rectangle
                 if (!scoreUpdated[i]) {
-                    // Check for the corresponding rectangle's red dot
-                    checkRedDot(i);
+
+                    checkRedDot(i, redDots);
 
                     // Set the flag to true to prevent further score updates in this rectangle
                     scoreUpdated[i] = true;
@@ -179,50 +191,40 @@ public class Controller implements Initializable {
         if (!playerInsideRectangle) {
             Arrays.fill(scoreUpdated, false);
         }
+
+        checkPlayerCollision();
     }
 
     private static boolean isPointInsideRectangle(double x, double y, double x1, double y1, double x2, double y2) {
         return x >= x1 && y >= y1 && x >= x2 && y >= y2;
     }
-    private void checkRedDot(int rectangleIndex) {
-        // Retrieve the corresponding red dot based on the rectangle index
-        Rectangle redDot = redDots.get(rectangleIndex);
+    private void checkRedDot(int rectangleIndex, List<Rectangle> dots) {
+        // Retrieve the corresponding red or blue dot based on the rectangle index
+        Rectangle dot = dots.get(rectangleIndex);
 
         double playerX = runner.getLayoutX();
         double playerY = runner.getLayoutY();
         double playerWidth = runner.getFitWidth();
         double playerHeight = runner.getFitHeight();
 
-        double redDotX = redDot.getX();
-        double redDotY = redDot.getY();
-        double redDotWidth = redDot.getWidth();
-        double redDotHeight = redDot.getHeight();
+        double dotX = dot.getX();
+        double dotY = dot.getY();
+        double dotWidth = dot.getWidth();
+        double dotHeight = dot.getHeight();
 
-        // Check if the red dot's position is within the player's bounding box
-        if (isPlayerFlipped && !scoreUpdated[rectangleIndex]) {
-            if ((redDotX >= playerX && redDotX <= playerX + playerWidth) ||
-                    (redDotX + redDotWidth >= playerX && redDotX + redDotWidth <= playerX + playerWidth)) {
-                if ((redDotY >= playerY && redDotY <= playerY + playerHeight) ||
-                        (redDotY + redDotHeight >= playerY && redDotY + redDotHeight <= playerY + playerHeight)) {
-                    // Increment the score counter by 10
-                    scoreCounter += 10;
+        // Check if the dot's position is within the player's bounding box
+        if (!scoreUpdated[rectangleIndex]) {
+            if ((dotX >= playerX && dotX <= playerX + playerWidth) ||
+                    (dotX + dotWidth >= playerX && dotX + dotWidth <= playerX + playerWidth)) {
+                if ((dotY >= playerY && dotY <= playerY + playerHeight) ||
+                        (dotY + dotHeight >= playerY && dotY + dotHeight <= playerY + playerHeight)) {
+                    if (dot.getFill() == Color.RED && isPlayerFlipped){
+                        scoreCounter += 10;
+                    }
                     score.setText("Total " + scoreCounter);
                     scoreUpdated[rectangleIndex] = true;
+                    System.out.println("Printing2");
                 }
-            }
-        }
-    }
-
-
-
-
-    private void removePreviousStick(int rectangleIndex) {
-        // Assuming that the sticks are added in the even indices of the plane's children
-        int stickIndex = rectangleIndex * 2; // Index of the stick in the plane
-        if (stickIndex > 0 && stickIndex < plane.getChildren().size()) {
-            Node previousStick = plane.getChildren().get(stickIndex);
-            if (previousStick instanceof Rectangle && ((Rectangle) previousStick).getFill() == Color.BLUE) {
-                plane.getChildren().remove(previousStick);
             }
         }
     }
@@ -233,7 +235,9 @@ public class Controller implements Initializable {
     void pressed(KeyEvent event) {
         if (event.getCode() == KeyCode.SPACE) {
             stickLength += 10; // Increase stick length by 10 units
-            currentStick = createAndAddRectangle(player.getX() + player.getImageView().getFitWidth() / 2, 400, stickLength, 3, Color.BLUE);
+            currentStick = createAndAddRectangle(player.getX() + player.getImageView().getFitWidth() / 2, 400, stickLength, 3, Color.GREY);
+
+            createAndAddRectangle(player.getX() + player.getImageView().getFitWidth() / 2, 400, stickLength, 3, Color.GREY);
 
             // Print the updated position of the runner
             System.out.println("Runner X: " + runner.getLayoutX());
@@ -287,4 +291,48 @@ public class Controller implements Initializable {
         plane.getChildren().add(rectangle);
         return rectangle;
     }
-}
+
+    private void checkPlayerCollision() {
+        double playerX = runner.getLayoutX();
+        double playerY = runner.getLayoutY();
+
+
+        // Check for collision with black rectangles
+        if (playerY >= 400) { // *** THE MAIN ISSUE ****
+            handleBlackRectangleCollision();
+            if (isPlayerFlipped && !gameOverDisplayed){
+                showGameOverScreen();
+                gameOverDisplayed = true;
+            }
+        }
+    }
+
+    private void handleBlackRectangleCollision() {
+        // Implement the logic for black rectangle collision
+        // This could involve opening a new blank screen or any other action.
+        System.out.println("Collision with black rectangle!");
+    }
+
+    private void showGameOverScreen() {
+        try {
+            // Load the GameOver.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("GameOver.fxml"));
+            Parent root = loader.load();
+
+            // Create a new stage (window) for the Game Over screen
+            Stage stage = new Stage();
+            stage.setTitle("Game Over");
+            stage.setScene(new Scene(root, 600, 400));
+
+            // Show the stage
+            stage.show();
+
+            // Close the current stage (you may need to modify this based on your application's structure)
+            Stage currentStage = (Stage) plane.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle the exception as needed
+        }
+
+    }}
