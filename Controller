@@ -28,47 +28,69 @@ public class Controller implements Initializable {
 
     @FXML
     private Text score;
-    int Totalscore = 0;
     private double stickLength = 0;
     private Rectangle currentStick;
 
-    private Bird birdComponent;
-    private MovementController movementController = new MovementController();
-    private boolean isLeftKeyPressed = false;
-    private boolean isRightKeyPressed = false;
-    private boolean isUpKeyPressed = false;
-    private boolean isDownKeyPressed = false;
-
-    // Calculate the positions of small rectangles
     double rectangle1StartX = 0;
-    double rectangle1EndX = 90;
-    double rectangle2StartX = 200;
-    boolean cherry = false;
-
-    double rectangle2EndX = 280;
-    double rectangle3StartX = 350;
-    double rectangle3EndX = 470;
-
-    double rectangle4StartX = 500;
-    double rectangle4EndX = 590;
+    double rectangle1EndX = 120;
+    double rectangle2StartX = 250;
+    double rectangle2EndX = 370;
+    double rectangle3StartX = 500;
+    double rectangle3EndX = 620;
+    double redDot1StartY;
+    double redDot1EndY;
+    double redDot2StartY;
+    double redDot2EndY;
+    double redDot3StartY;
+    double redDot3EndY;
 
 
     private int scoreCounter = 0;
-    private boolean[] scoreUpdated = new boolean[4];
-
+    private boolean[] scoreUpdated = new boolean[3];
+    private Player player; // Declare a player instance
 
     private Map<KeyCode, Long> keyPressTimeMap = new HashMap<>();
+    private List<Rectangle> redDots = new ArrayList<>();
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         // Add 4 rectangles to the bottom of the screen
-        addRectangleWithDot(0, 400, 90, 100, Color.BLACK);
-        addRectangleWithDot(200, 400, 80, 100, Color.BLACK);
-        addRectangleWithDot(350, 400, 120, 100, Color.BLACK);
-        addRectangleWithDot(500, 400, 90, 100, Color.BLACK);
-        runner.setLayoutX(0);
-        runner.setLayoutY(290);
+        // Add 3 rectangles to the bottom of the screen
+        addRectangle(rectangle1StartX, 400, 50, 200, Color.BLACK);
+        addRectangle(rectangle2StartX, 400, 30, 200, Color.BLACK);
+        addRectangle(rectangle3StartX, 400, 70, 200, Color.BLACK);
+
+
+        Rectangle redDot1 = addRectangleCherry(rectangle1EndX + 30, 420, 10, 10, Color.RED);
+        Rectangle redDot2 = addRectangleCherry(rectangle2EndX + 40, 420, 10, 10, Color.RED);
+        Rectangle redDot3 = addRectangleCherry(rectangle3EndX + 60, 420, 10, 10, Color.RED);
+
+        // Add red dots to the list
+        redDots.add(redDot1);
+        redDots.add(redDot2);
+        redDots.add(redDot3);
+
+        player = new Player(runner, rectangle1StartX, 345);
+
+        rectangle1StartX = rectangle1EndX + 30;
+        rectangle1EndX = rectangle1StartX + 10;
+
+        rectangle2StartX = rectangle2EndX + 40;
+        rectangle2EndX = rectangle2StartX + 10;
+
+        rectangle3StartX = rectangle3EndX + 60;
+        rectangle3EndX = rectangle3StartX + 10;
+
+        double redDot1StartY = redDot1.getY();
+        double redDot1EndY = redDot1StartY + redDot1.getHeight();
+
+        double redDot2StartY = redDot2.getY();
+        double redDot2EndY = redDot2StartY + redDot2.getHeight();
+
+        double redDot3StartY = redDot3.getY();
+        double redDot3EndY = redDot3StartY + redDot3.getHeight();
+
 
         gameLoop = new AnimationTimer() {
             @Override
@@ -79,6 +101,14 @@ public class Controller implements Initializable {
 
         gameLoop.start();
         playMusic();
+    }
+
+    private void addRectangle(double x, double y, double width, double height, Color color) {
+        createAndAddRectangle(x, y, width, height, color);
+    }
+
+    private Rectangle addRectangleCherry(double x, double y, double width, double height, Color color) {
+        return createAndAddRectangle(x, y, width, height, color);
     }
 
     private void playMusic() {
@@ -93,36 +123,42 @@ public class Controller implements Initializable {
 
     private void update() {
         double playerX = runner.getLayoutX();
+        double playerY = runner.getLayoutY();
 
         // Flag to check if the player is inside any rectangle
         boolean playerInsideRectangle = false;
 
         // Iterate through all rectangles and check conditions
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             double startX = 0;
             double endX = 0;
+            double startY = 0;
+            double endY = 0;
 
             switch (i) {
                 case 0:
                     startX = rectangle1StartX;
                     endX = rectangle1EndX;
+                    startY = redDot1StartY;
+                    endY = redDot1EndY;
                     break;
                 case 1:
                     startX = rectangle2StartX;
                     endX = rectangle2EndX;
+                    startY = redDot2StartY;
+                    endY = redDot2EndY;
                     break;
                 case 2:
                     startX = rectangle3StartX;
                     endX = rectangle3EndX;
-                    break;
-                case 3:
-                    startX = rectangle4StartX;
-                    endX = rectangle4EndX;
+                    startY = redDot3StartY;
+                    endY = redDot3EndY;
                     break;
             }
 
             // Check if player is within the X range of the rectangle
-            if (playerX > startX && playerX < endX) {
+            if (isPointInsideRectangle(playerX,playerY,startX, startY, endX, endY)) {
+                System.out.println("Yes2");
                 playerInsideRectangle = true;
 
                 // Check if the score has not been updated for this rectangle
@@ -134,7 +170,6 @@ public class Controller implements Initializable {
                     scoreUpdated[i] = true;
 
                     // Increment the scoreCounter by 10 when the player crosses a red cherry
-                    scoreCounter += 10;
                     score.setText("Total " + scoreCounter);
                 }
             }
@@ -146,24 +181,34 @@ public class Controller implements Initializable {
         }
     }
 
-
-
+    private static boolean isPointInsideRectangle(double x, double y, double x1, double y1, double x2, double y2) {
+        return x >= x1 && y >= y1 && x >= x2 && y >= y2;
+    }
     private void checkRedDot(int rectangleIndex) {
-        // Assuming that the rectangles and red dots are added in pairs
-        Node node = plane.getChildren().get(rectangleIndex * 2);
-        if (node instanceof Rectangle) {
-            Rectangle rectangle = (Rectangle) node;
-            Rectangle redDot = (Rectangle) plane.getChildren().get(rectangleIndex * 2 + 1);
+        // Retrieve the corresponding red dot based on the rectangle index
+        Rectangle redDot = redDots.get(rectangleIndex);
 
-            double playerY = runner.getLayoutY();
-            double redDotY = redDot.getY();
+        double playerX = runner.getLayoutX();
+        double playerY = runner.getLayoutY();
+        double playerWidth = runner.getFitWidth();
+        double playerHeight = runner.getFitHeight();
 
-            // Check if the player's position is near the red dot in the specific rectangle
-            if (playerY <= redDotY + 10 && playerY >= redDotY - 10 && !scoreUpdated[rectangleIndex]) {
-                // Increment the score counter by 10
-                scoreCounter += 10;
-                score.setText("Total " + scoreCounter);
-                scoreUpdated[rectangleIndex] = true;
+        double redDotX = redDot.getX();
+        double redDotY = redDot.getY();
+        double redDotWidth = redDot.getWidth();
+        double redDotHeight = redDot.getHeight();
+
+        // Check if the red dot's position is within the player's bounding box
+        if (isPlayerFlipped && !scoreUpdated[rectangleIndex]) {
+            if ((redDotX >= playerX && redDotX <= playerX + playerWidth) ||
+                    (redDotX + redDotWidth >= playerX && redDotX + redDotWidth <= playerX + playerWidth)) {
+                if ((redDotY >= playerY && redDotY <= playerY + playerHeight) ||
+                        (redDotY + redDotHeight >= playerY && redDotY + redDotHeight <= playerY + playerHeight)) {
+                    // Increment the score counter by 10
+                    scoreCounter += 10;
+                    score.setText("Total " + scoreCounter);
+                    scoreUpdated[rectangleIndex] = true;
+                }
             }
         }
     }
@@ -171,18 +216,45 @@ public class Controller implements Initializable {
 
 
 
+    private void removePreviousStick(int rectangleIndex) {
+        // Assuming that the sticks are added in the even indices of the plane's children
+        int stickIndex = rectangleIndex * 2; // Index of the stick in the plane
+        if (stickIndex > 0 && stickIndex < plane.getChildren().size()) {
+            Node previousStick = plane.getChildren().get(stickIndex);
+            if (previousStick instanceof Rectangle && ((Rectangle) previousStick).getFill() == Color.BLUE) {
+                plane.getChildren().remove(previousStick);
+            }
+        }
+    }
+
+    private boolean isPlayerFlipped = false;
+
     @FXML
     void pressed(KeyEvent event) {
         if (event.getCode() == KeyCode.SPACE) {
             stickLength += 10; // Increase stick length by 10 units
-            currentStick = createAndAddRectangle(70, 400, stickLength, 5, Color.BLUE); // Create a horizontal line
-            runner.setLayoutX(stickLength-5);
-            runner.setLayoutY(290);
+            currentStick = createAndAddRectangle(player.getX() + player.getImageView().getFitWidth() / 2, 400, stickLength, 3, Color.BLUE);
 
             // Print the updated position of the runner
             System.out.println("Runner X: " + runner.getLayoutX());
             System.out.println("Runner Y: " + runner.getLayoutY());
+        } else if (event.getCode() == KeyCode.D) {
+            // Handle the "D" key press to flip the player by 180 degrees
+            togglePlayerFlip();
         }
+    }
+
+    private void togglePlayerFlip() {
+        // Toggle the flip state
+        isPlayerFlipped = !isPlayerFlipped;
+
+        // Flip the player by 180 degrees based on the flip state
+        runner.setScaleY(isPlayerFlipped ? -1 : 1);
+
+        // Adjust the player's position based on the flip state
+        double playerY = isPlayerFlipped ? (400 + 5) : 345; // Adjust these values as needed
+        System.out.println("After flip Y"+playerY);
+        player.setY(playerY);
     }
 
     @FXML
@@ -190,12 +262,22 @@ public class Controller implements Initializable {
         if (event.getCode() == KeyCode.SPACE) {
             // Remove the old stick after releasing the space key
             removeStick();
+
+            // Translate the player to a new position
+            double newPlayerX = player.getX() + stickLength + 10; // Adjust the value as needed
+            player.setX(newPlayerX);
+
+            // Print the updated position of the player
+            System.out.println("Player X: " + player.getX());
+            System.out.println("Player Y: " + player.getY());
         }
     }
 
     private void removeStick() {
         if (currentStick != null && plane.getChildren().contains(currentStick)) {
             plane.getChildren().remove(currentStick);
+            stickLength = 0;
+            currentStick = null;
         }
     }
 
@@ -204,14 +286,5 @@ public class Controller implements Initializable {
         rectangle.setFill(color);
         plane.getChildren().add(rectangle);
         return rectangle;
-    }
-
-    private void addRectangleWithDot(double x, double y, double width, double height, Color color) {
-        createAndAddRectangle(x, y, width, height, color);
-
-        // Add a dot at the top of the rectangle
-        Rectangle dot = new Rectangle(x + width / 2 - 2, y - 2, 10, 10);
-        dot.setFill(Color.RED);
-        plane.getChildren().add(dot);
     }
 }
