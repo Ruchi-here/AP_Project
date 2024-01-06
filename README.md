@@ -2,7 +2,7 @@
 
 Stick hero game includes the following classes:
 
-1)BlueCherry - It implements cherry class. class that represents a blue cherry in the game.
+1)BlueCherry - It implements cherry class. class that represents a blue cherry in the game. \n
 2)cherry Interface - class that represents a cherry in the game.
 3)RedCherry - class that represents a red cherry in the game.
 4)GameOverController - controller that handles the game over screen.
