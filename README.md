@@ -1,30 +1,58 @@
 # Stick Hero Game
 
 ## Overview
-Stick Hero Game Project Introduction We have created a game inspired by Stick Hero using JavaFX and object-oriented programming (OOP) principles. Our game replicates the core mechanics of Stick Hero while incorporating our own creative elements.
+Welcome to Stick Hero Game Project! This game is inspired by Stick Hero and built using JavaFX with a focus on object-oriented programming (OOP) principles. We've not only recreated the core mechanics of Stick Hero but also added our own creative elements to enhance gameplay.
 
-<img width="599" alt="291795392-2cda9c72-8124-4ee7-ab99-962c9bfc81e7" src="https://github.com/Ruchi-here/AP_Project/assets/122676573/0fbb44bc-f6ff-4042-bff9-85e357f08bbc">
+![Stick Hero Game Screenshot 1](https://github.com/Ruchi-here/AP_Project/assets/122676573/0fbb44bc-f6ff-4042-bff9-85e357f08bbc)
 
-<img width="600" alt="291795680-49ccf957-0b14-4e0d-ae32-3643f0835c78" src="https://github.com/Ruchi-here/AP_Project/assets/122676573/0fec8bb1-f9d8-4b6a-bc30-76bc3d33f7ef">
+![Stick Hero Game Screenshot 2](https://github.com/Ruchi-here/AP_Project/assets/122676573/0fec8bb1-f9d8-4b6a-bc30-76bc3d33f7ef)
 
-<img width="598" alt="291795758-5fe9a2fe-b113-46f5-8ad0-804cbbdcb920" src="https://github.com/Ruchi-here/AP_Project/assets/122676573/e10bd72f-dc9a-4495-95f9-91fc086f2a32">
-<img width="600" alt="291795817-19acb3b6-062a-43da-92c3-ecb7edb2f092" src="https://github.com/Ruchi-here/AP_Project/assets/122676573/74b8328c-c4b1-42a0-9fda-1ec61fceeab6">
+![Stick Hero Game Screenshot 3](https://github.com/Ruchi-here/AP_Project/assets/122676573/e10bd72f-dc9a-4495-95f9-91fc086f2a32)
 
-<img width="599" alt="291795890-fdeeb259-7c4b-45df-85d5-105e00aa65f4" src="https://github.com/Ruchi-here/AP_Project/assets/122676573/6c0ae3e7-a933-44d0-8b31-674f5505d6b7">
+![Stick Hero Game Screenshot 4](https://github.com/Ruchi-here/AP_Project/assets/122676573/74b8328c-c4b1-42a0-9fda-1ec61fceeab6)
 
+![Stick Hero Game Screenshot 5](https://github.com/Ruchi-here/AP_Project/assets/122676573/6c0ae3e7-a933-44d0-8b31-674f5505d6b7)
 
-Game Summary This Project involves developing a complete game where a character named stick-hero navigates between platforms by extending a stick. Length of stick is variable and is controlled by the user. Along the way, the character can collect cherries as rewards while reaching the goal. Game Mechanics
+## Game Summary
+Stick Hero Game challenges players with navigating a character across platforms by extending a stick to bridge gaps between pillars. Here are the key features:
 
-Character Control: Players can control stick-hero, maneuvering the character between platforms and extending a stick to bridge gaps between pillars.
-Multiple Pillars: Incorporate various pillars of differing widths to add complexity and challenge to the game.
-Reviving Feature: Implement a feature allowing the player to revive once by using a specific number of collected cherries. Deduct cherries upon revival.
-Precision Timing: Players must time the stick extension accurately to land on the next platform. Failure results in the character falling and the game ending.
-Reward Collection: Enable the character to collect cherries by flipping upside down while moving between platforms. These collected rewards contribute to the player's score.
-Scoring System: Design a scoring mechanism that encourages players to aim for higher scores by collecting more rewards.
-Progress Saving: Include an option for players to save their progress (last score, highest score, total cherries) during gameplay.
-Enhancements: Utilize graphics, sound effects, and animations to elevate the overall gaming experience. Notes We have used core concepts like Design patterns like singleton and Factory design, JUnit test cases, JavaFX and other OOPs concepts throughout this projects. Bonus Marks We have added multiple new features as bonus points. Below is the list:
-Reviving feature
-Variable size of platform
-Multithreading
-Additional Obstacle
-Jumping Feature CONTROLS Press SPACEBAR TO START EXTENDING THE STICK Press ENTER TO STOP THE EXTENSION While CHARACTER IS MOVING OVER THE STICK, PRESS SHIFT TO FLIP THE CHARACTER IN ORDER TO COLLECT THE CANDY BONUS COMMAND IMPLEMENTED- Press SPACEBAR TO START JUMPING WHILE OVER THE STICK AND PRESS ENTER TO STOP THE JUMP AND GET BACK OVER THE PLATFORM
+- **Character Control:** Maneuver stick-hero between platforms and extend a variable-length stick to bridge gaps.
+- **Multiple Pillars:** Encounter various pillars of different widths to increase gameplay complexity.
+- **Reviving Feature:** Use collected cherries to revive once after a fall, deducting cherries upon revival.
+- **Precision Timing:** Extend the stick accurately to land on the next platform; failing results in game over.
+- **Reward Collection:** Collect cherries by flipping upside down while moving between platforms to increase score.
+- **Scoring System:** Aim for higher scores by collecting more cherries.
+- **Progress Saving:** Save game progress including last score, highest score, and total cherries.
+- **Enhancements:** Enjoy enhanced graphics, sound effects, and animations for an immersive gaming experience.
+
+## Bonus Marks Features
+- **Reviving Feature:** Use cherries to revive after falling.
+- **Variable Platform Sizes:** Encounter platforms of varying widths.
+- **Multithreading:** Utilize multithreading for smoother gameplay.
+- **Additional Obstacles:** Navigate additional challenges for increased difficulty.
+- **Jumping Feature:** Jump over obstacles using specific controls.
+
+## Controls
+- Press **SPACEBAR** to start extending the stick.
+- Press **ENTER** to stop extending the stick.
+- While character is moving over the stick, press **SHIFT** to flip and collect cherries.
+- Bonus Command: Press **SPACEBAR** to start jumping and **ENTER** to stop jumping over the stick and return to the platform.
+
+## Technologies Used
+- JavaFX for graphical user interface.
+- Object-oriented programming (OOP) principles including design patterns like Singleton and Factory.
+- JUnit for testing.
+
+## How to Run
+1. Clone the repository.
+2. Compile and run the main Java class.
+
+## Contributor
+- Ruchi Kumari
+
+## License
+This project is licensed under the [MIT] License - see the LICENSE file for details.
+
+---
+
+Feel free to adjust the sections, add more details, or include specific contributors as needed. This format should help make your readme more structured and appealing to readers.
