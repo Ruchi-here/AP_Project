@@ -8,7 +8,6 @@ public class PoisonReward extends reward2 implements renderable{
     private static final Image poisonImage;
 
     static {
-        // Load the poison image (replace "poison.png" with the actual file path)
         poisonImage = new Image("C:\\Users\\shaur\\Downloads\\poisonrewardnew.png");
     }
     public PoisonReward(double x, double y) {
@@ -31,8 +30,6 @@ public class PoisonReward extends reward2 implements renderable{
 
     @Override
     public void render(GraphicsContext gc, double cameraOffset) {
-//        gc.setFill(Color.ORANGE);
-//        gc.fillOval(this.x-cameraOffset, this.y, 10.0, 10.0);
         gc.drawImage(poisonImage, getX() - cameraOffset, getY(),20,20);
     }
 }
