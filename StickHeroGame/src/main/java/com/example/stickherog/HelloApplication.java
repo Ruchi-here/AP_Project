@@ -56,15 +56,15 @@ import javafx.scene.image.ImageView;
  import javafx.scene.image.ImageView;
  import javafx.util.Duration;
 
-// import javax.print.attribute.standard.Media;
-//import javafx.scene.media.Media;
+import javax.print.attribute.standard.Media;
+import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import org.junit.Test;
 import org.w3c.dom.Entity;
 
 import static org.testng.AssertJUnit.assertEquals;
 
-//import static com.sun.webkit.graphics.GraphicsDecoder.SCALE;
+import static com.sun.webkit.graphics.GraphicsDecoder.SCALE;
 public class HelloApplication extends Application {
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
@@ -77,7 +77,7 @@ public class HelloApplication extends Application {
     private List<Reward> rewards;
     private List<reward2> reward2s;
     private List<PoisonReward> poisonrewards;
-//    private List<Obstacle> obstacles; // Add this line
+   private List<Obstacle> obstacles;
 
     public static boolean isFlipping = false;
     private int score = 0;
@@ -94,13 +94,13 @@ public class HelloApplication extends Application {
     }
 
     boolean gameoverflag=false;
-//
-//    public int getframwidth(){
-//        return WIDTH*SCALE;
-//    }
-//    public int getframeheight(){
-//        return HEIGHT*SCALE;
-//    }
+
+   public int getframwidth(){
+       return WIDTH*SCALE;
+   }
+   public int getframeheight(){
+       return HEIGHT*SCALE;
+   }
     public static Camera cam=new Camera();
 
     private static final double MIN_PLATFORM_GAP = 200.0;
@@ -124,7 +124,7 @@ public void tick(){
         gc = canvas.getGraphicsContext2D();
         ((Pane) root).getChildren().add(canvas);
 
-        initializeGame(); // Move this line here
+        initializeGame();
         handleInput(scene);
         playBackgroundMusic();
         scene.setOnKeyPressed(event -> {
@@ -138,14 +138,13 @@ public void tick(){
             }
             if (event.getCode() == KeyCode.SPACE && !isFlipping&&!stickHero.ismoving&& !isCharacterFlipped) {
                 stickHero.extend();
-                isStickStopped = false; // Reset the flag when the stick is flipping
+                isStickStopped = false;
             }
             if (event.getCode() == KeyCode.ENTER&& !stickHero.ismoving) {
                 stickHero.stopStick();
                 isStickStopped = true;
             }
             if (event.getCode() == KeyCode.SPACE && stickHero.ismoving&&!isCharacterFlipped) {
-                // Check if the character is on a platform before allowing it to jump
                 stickHero.jump();
             }
             isFlipping = false;
@@ -169,11 +168,9 @@ public void tick(){
         primaryStage.show();
     }
     private void initializeUI() {
-        // Create a button to start the game
         Button startButton = new Button("Start Game");
         startButton.setOnAction(event -> startGame());
 
-        // Add the button to the root pane
         root.getChildren().add(startButton);
     }
     private int getframeheight() {
@@ -181,7 +178,7 @@ public void tick(){
     }
 
     private void startGame() {
-//        playBackgroundMusic();
+       playBackgroundMusic();
         new AnimationTimer() {
             long lastTime = System.nanoTime();
 
@@ -200,7 +197,7 @@ public void tick(){
     private MediaPlayer deadplayer;
 
     private void playBackgroundMusic() {
-        String musicFile = "C:\\Users\\shaur\\Desktop\\game-music-7408.mp3"; // Replace this with the actual path to your music file
+        String musicFile = "C:\\Users\\shaur\\Desktop\\game-music-7408.mp3";
         try {
             Path path = Paths.get(musicFile);
             String uri = path.toUri().toString();
@@ -213,7 +210,7 @@ public void tick(){
         }
     }
     private void playrewardMusic() {
-        String musicFile ="C:\\Users\\shaur\\Desktop\\coin-upaif-14631.mp3"; // Replace this with the actual path to your music file
+        String musicFile ="C:\\Users\\shaur\\Desktop\\coin-upaif-14631.mp3"; 
         try {
             Path path = Paths.get(musicFile);
             String uri = path.toUri().toString();
@@ -226,7 +223,7 @@ public void tick(){
         }
     }
     private void playerdeadMusic() {
-        String musicFile ="C:\\Users\\shaur\\Desktop\\male-scream-in-fear-123079.mp3"; // Replace this with the actual path to your music file
+        String musicFile ="C:\\Users\\shaur\\Desktop\\male-scream-in-fear-123079.mp3";
         try {
             Path path = Paths.get(musicFile);
             String uri = path.toUri().toString();
@@ -263,21 +260,18 @@ public void tick(){
         double rewardX = 25;
         double platformWidth = 50;
         double platformWidthmin = 70;
-        double platformWidthmax = 150; // Default width
+        double platformWidthmax = 150;
         double rewardX2 = 75;
         double poisonrewardX=75;
 
 
         for (int i = 0; i < 500; i++) {
-            // Add platform
             Platform platform = new Platform(platformX, HEIGHT - 200, platformWidth, 2000);
             platforms.add(platform);
-            // Add reward
             Reward reward = new Reward(rewardX, 385);
             rewards.add(reward);
 
-            // Calculate the position for rewardX2 between two platforms
-            if (i < 499) { // Ensure there is a next platform
+            if (i < 499) {
                 Platform nextPlatform = new Platform(platformX + platformWidth, HEIGHT - 200, 0, 2000);
                 double rewardX2Gap = Math.random() * (MAX_PLATFORM_GAP - MIN_PLATFORM_GAP) + MIN_PLATFORM_GAP;
                 double poisonrewardgap = Math.random() * (MAX_PLATFORM_GAP - MIN_PLATFORM_GAP) + MIN_PLATFORM_GAP;
@@ -292,7 +286,6 @@ public void tick(){
 
             PoisonReward poisonrew = new PoisonReward(poisonrewardX, 385);
             poisonrewards.add(poisonrew);
-            // Adjust X positions and width for the next iteration with random gap
             double platformGap = Math.random() * (MAX_PLATFORM_GAP - MIN_PLATFORM_GAP) + MIN_PLATFORM_GAP;
             platformWidth = Math.random() * (platformWidthmax - platformWidthmin) + platformWidthmin;
 
@@ -301,22 +294,17 @@ public void tick(){
             poisonrewardX+=platformWidth + platformGap;
         }
 
+       platforms.add(new Platform(0, HEIGHT-200, 150, 2000));
+       platforms.add(new Platform(300, HEIGHT-200, 100, 2000));
+       platforms.add(new Platform(550, HEIGHT-200, 50, 2000));
+       platforms.add(new Platform(700, HEIGHT-200, 150, 2000));
 
+       platforms.add(createNewPlatform(0, 150));
 
-//        platforms.add(new Platform(0, HEIGHT-200, 150, 2000));
-//        platforms.add(new Platform(300, HEIGHT-200, 100, 2000));
-//        platforms.add(new Platform(550, HEIGHT-200, 50, 2000));
-//        platforms.add(new Platform(700, HEIGHT-200, 150, 2000));
-//
-////        platforms.add(createNewPlatform(0, 150));
-//
-//        rewards.add(new Reward(100, 385));
-//        rewards.add(new Reward(350, 385));
-//        rewards.add(new Reward(570, 385));
-//        rewards.add(new Reward(740, 385));
-
-
-
+       rewards.add(new Reward(100, 385));
+       rewards.add(new Reward(350, 385));
+       rewards.add(new Reward(570, 385));
+       rewards.add(new Reward(740, 385));
 
     }
     private int getframwidth() {
@@ -340,15 +328,14 @@ public void tick(){
                     stickHero.collectReward(reward);
                     rewardsToRemove.add(reward);
 
-                    score += 10; // Increase the score when a reward is collected
-                    cherries++; // Increase the cherries for the reviving feature
+                    score += 10; 
+                    cherries++;
 
                     Text perfectText = new Text("PERFECT!");
                     perfectText.setX(reward.getX()-20-cam.getX());
-                    perfectText.setY(reward.getY() - 50); // Adjust the Y position as needed
-                    perfectText.setFill(Color.GOLD); // Set text color to golden
+                    perfectText.setY(reward.getY() - 50);
+                    perfectText.setFill(Color.GOLD); 
                     perfectText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
-                    // Apply fade-in and fade-out animation
                     FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5 ), perfectText);
                     fadeIn.setFromValue(0.0);
                     fadeIn.setToValue(1);
@@ -360,7 +347,7 @@ public void tick(){
                     SequentialTransition fade = new SequentialTransition(fadeIn, fadeOut);
                     fade.play();
 
-                    root.getChildren().add(perfectText); // Add text to the scene graph
+                    root.getChildren().add(perfectText);
                 }
             }
             for (reward2 reward2s : reward2s) {
@@ -369,8 +356,8 @@ public void tick(){
                     stickHero.collectreward2(reward2s);
                     reward2toremove.add(reward2s);
 
-                    score += 10; // Increase the score when a reward is collected
-                    cherries++; // Increase the cherries for the reviving feature
+                    score += 10;
+                    cherries++;
                 }
             }
             for (PoisonReward poisonReward : poisonrewards) {
@@ -387,18 +374,17 @@ public void tick(){
 
                 }
             }
-//            if(isCharacterFlipped&&isCharacterOnPlatform){
-//                isCharacterFlipped=false;
-//                displayGameOverMessage();
-//                playerdeadMusic();
-//                bgmPlayer.stop();
-//                isGameOver = true;
-//                displayReviveBox();
-//
-//                stickHero.land();
-//            }
+           if(isCharacterFlipped&&isCharacterOnPlatform){
+               isCharacterFlipped=false;
+               displayGameOverMessage();
+               playerdeadMusic();
+               bgmPlayer.stop();
+               isGameOver = true;
+               displayReviveBox();
 
-// Remove the collected rewards outside the iteration
+               stickHero.land();
+           }
+
             rewards.removeAll(rewardsToRemove);
             reward2s.removeAll(reward2toremove);
             poisonrewards.removeAll(poisonrewardtoremove);
@@ -408,19 +394,18 @@ public void tick(){
                 double characterWidth = stickHero.getCharacterImage().getWidth();
                 double characterEnd = stickEnd + characterWidth; // Calculate character's end position
 
-            // Ensure the character stays within the screen's boundaries
             if (characterEnd > 1000) {
-//                StickHeroCharacter.x+=20*deltaTime;
+               StickHeroCharacter.x+=20*deltaTime;
                 stickHero.moveCharacterTo(stickEnd,350,gc);
                 hasMovedToStickEnd = true;
             }
             else {
-//                StickHeroCharacter.x+=20*deltaTime;
+               StickHeroCharacter.x+=20*deltaTime;
                 stickHero.moveCharacterTo(stickEnd,350,gc);
                 hasMovedToStickEnd = true;
 
             }
-                double characterSpeed = 20; // Adjust speed as needed
+                double characterSpeed = 20;
 
                 for (Platform platform : platforms) {
                 double platformStartX = platform.getX();
@@ -435,9 +420,8 @@ public void tick(){
                 }
             }
 
-            // If character's new position is not within any platform, it falls
             if ((!isCharacterOnPlatform &&hasMovedToStickEnd&&!stickHero.ismoving)) {
-                stickHero.fallCharacterTo(stickHero.getX(),500,gc);// Set character back to its original x-coordinate
+                stickHero.fallCharacterTo(stickHero.getX(),500,gc);
                 displayGameOverMessage();
                 playerdeadMusic();
                 bgmPlayer.stop();
@@ -446,12 +430,11 @@ public void tick(){
                 isGameOver = true;
                     displayReviveBox();
 
-                stickHero.land(); // Handle falling logic
+                stickHero.land();
             }
-//
         }
             if (isStickStopped && hasMovedToStickEnd&&!isCharacterOnPlatform) {
-                stickHero.fallCharacterTo(stickHero.getX(),500,gc);// Set character back to its original x-coordinate
+                stickHero.fallCharacterTo(stickHero.getX(),500,gc);
             }
 
         if (isFlipping) {
@@ -459,30 +442,27 @@ public void tick(){
                 if (stickHero.intersects(reward)) {
                     stickHero.collectReward(reward);
                     rewards.remove(reward);
-                    score += 10; // Increase the score when a reward is collected
-                    cherries++; // Increase the cherries for the reviving feature
+                    score += 10; 
+                    cherries++;
                     break;
                 }
             }
         }
 
 
-        // Check if Stick Hero falls off the screen
         if (stickHero.getY() > HEIGHT) {
             if (cherries > 0) {
-                cherries--; // Deduct cherries for reviving
+                cherries--;
                 stickHero.revive();
             } else {
-                // Game over logic (reset the game or show a game over screen)
                 initializeGame();
                 score = 0;
             }
         }
 
 
-// Check if the character has moved to the end of the stick and reset the stick-related flags
         if (hasMovedToStickEnd && stickHero.getStickLength() == 0) {
-            stickHero.resetStick(); // Reset the stick length to zero
+            stickHero.resetStick(); 
             hasMovedToStickEnd = false;
             isStickStopped = false;
             isFlipping = false;
@@ -515,7 +495,7 @@ public void tick(){
             reviveBox.getChildren().removeAll(reviveText, yesButton, noButton);
             if (cherries > 1) {
                 cherries-=2;
-                score-=20;// Remove one cherry
+                score-=20;
                 removeGameOverMessage();
                 gameoverflag=false;
                 reviveBox.getChildren().removeAll(reviveText, yesButton, noButton);
@@ -527,13 +507,11 @@ public void tick(){
                 notEnoughCandyText.setFill(Color.RED);
                 notEnoughCandyText.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 
-                // Position the text message
                 notEnoughCandyText.setLayoutX(300);
                 notEnoughCandyText.setLayoutY(250);
 
                 root.getChildren().add(notEnoughCandyText);
 
-                // Fade out the message after a certain duration
                 FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), notEnoughCandyText);
                 fadeOut.setFromValue(1.0);
                 fadeOut.setToValue(0.0);
@@ -555,11 +533,10 @@ public void tick(){
             restartGame();
         });
 
-        // Display reviveBox in the root or scene
     }
     private void removeReviveBox() {
         root.getChildren().remove(reviveBox);
-        reviveBox = null; // Set to null to indicate it's removed
+        reviveBox = null;
     }
     public static boolean isCharacterFlipped = false;
     private void handleInput(Scene scene) {
@@ -574,32 +551,29 @@ public void tick(){
             }
             if (event.getCode() == KeyCode.SPACE && !isFlipping&&!stickHero.ismoving&&!isCharacterFlipped) {
                 stickHero.extend();
-                isStickStopped = false; // Reset the flag when the stick is flipping
+                isStickStopped = false;
             }
             if (event.getCode() == KeyCode.ENTER&&!stickHero.ismoving) {
                 stickHero.stopStick();
                 isStickStopped = true;
             }
             if (event.getCode() == KeyCode.SPACE && stickHero.ismoving&&!isCharacterFlipped) {
-                // Check if the character is on a platform before allowing it to jump
                 stickHero.jump();
             }
             isFlipping = false;
         });
     }
     private void displayGameOverMessage() {
-        // Code to display "Game Over" message on the screen
         Text gameOverText = new Text("Game Over!");
         gameOverText.setX(300);
         gameOverText.setY(100);
-        gameOverText.setFill(Color.RED); // Set color as needed
-        gameOverText.setFont(Font.font("Arial", FontWeight.BOLD, 30)); // Set font and size as needed
+        gameOverText.setFill(Color.RED);
+        gameOverText.setFont(Font.font("Arial", FontWeight.BOLD, 30)); 
 
         root.getChildren().add(gameOverText);
     }
     private void restartGame() {
-        // Code to reset the game state to its initial state
-//        bgmPlayer.play();
+        bgmPlayer.play();
         isCharacterFlipped = false;
         isGameOver = false;
         initializeGame();
@@ -613,11 +587,7 @@ public void tick(){
     }
     private void render() {
         gc.clearRect(0, 0, WIDTH, HEIGHT);
-
-        // Render the background using the adjusted camera position
         gc.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT);
-
-        // Render other game elements
         stickHero.renderCharacter(gc);
         stickHero.renderStick(gc);
 
@@ -635,52 +605,20 @@ public void tick(){
         for (PoisonReward poisonrew : poisonrewards) {
             poisonrew.render(gc, cam.getX());
         }
-        // Display score and cherries on the screen
         Font font = Font.font("Arial", FontWeight.BOLD, 14);
         gc.setFont(font);
         gc.setFill(Color.GOLD);
         gc.fillText("Score: " + score, 700, 30);
-        Image cherriesImage = new Image("file:/C:/Users/shaur/Desktop/cherry.png"); // Replace "/path/to/cherries.png" with the actual path
-
+        Image cherriesImage = new Image("file:/C:/Users/shaur/Desktop/cherry.png"); 
         gc.drawImage(cherriesImage, 690, 30,50,50);
         gc.fillText(": " + cherries, 740, 60);
 
     }
-
-//    private void render() {
-//
-//
-//        gc.drawImage(backgroundImage ,0,0, 800, 700);
-//        stickHero.renderCharacter(gc);
-//        stickHero.renderStick(gc);
-//
-//
-//        for (Platform platform : platforms) {
-//            platform.render(gc);
-//        }
-//
-//        for (Reward reward : rewards) {
-//            reward.render(gc);
-//        }
-//        for (reward2 reward2 : reward2s) {
-//            reward2.render(gc);
-//        }
-//        // Display score and cherries on the screen
-//        Font font = Font.font("Arial", FontWeight.BOLD, 14);
-//        gc.setFont(font);
-//        gc.setFill(Color.GOLD);
-//        gc.fillText("Score: " + score, 700, 30);
-//        Image cherriesImage = new Image("file:/C:/Users/shaur/Desktop/cherry.png"); // Replace "/path/to/cherries.png" with the actual path
-//
-//        gc.drawImage(cherriesImage, 690, 30,50,50);
-//        gc.fillText(": " + cherries, 740, 60);
-//
-//    }
-//private void simulateKeyPress(KeyCode key) {
-//    Robot robot = new Robot();
-//    robot.keyPress(key);
-//    robot.keyRelease(key);
-//}
+    private void simulateKeyPress(KeyCode key) {
+       Robot robot = new Robot();
+       robot.keyPress(key);
+       robot.keyRelease(key);
+    }
 
 @Test
 void testGetFrameWidth() {
