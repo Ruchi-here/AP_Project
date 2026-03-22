@@ -11,7 +11,7 @@ import javafx.util.Duration;
 
 import static com.example.stickherog.HelloApplication.*;
 
-//import static com.example.stickherog.HelloApplication.hasMovedToStickEnd;
+import static com.example.stickherog.HelloApplication.hasMovedToStickEnd;
 
 public class StickHeroCharacter {
     private static StickHeroCharacter instance;
@@ -89,17 +89,16 @@ public class StickHeroCharacter {
                 }
 
             }
-//            if(hasMovedToStickEnd){
-//                fallCharacterTo(x,450,gc);
-//                ismoving=false;
-//                stopStick();
-//                HelloApplication.isStickStopped=true;
-//                HelloApplication.hasMovedToStickEnd=true;
-//                isCharacterFlipped=false;
-//
-//            }
+           if(hasMovedToStickEnd){
+               fallCharacterTo(x,450,gc);
+               ismoving=false;
+               stopStick();
+               HelloApplication.isStickStopped=true;
+               HelloApplication.hasMovedToStickEnd=true;
+               isCharacterFlipped=false;
+
+           }
             else {
-                // Move character towards the stick's end point
                 if (x + MOVEMENT_SPEED < platform.getX() + platform.getWidth()) {
                     x += MOVEMENT_SPEED * deltaTime;
                 }
@@ -124,24 +123,6 @@ public class StickHeroCharacter {
         }
     }
 
-
-
-    //    public void renderCharacter(GraphicsContext gc) {
-//        gc.drawImage(characterImage, x, y, 20, CHARACTER_HEIGHT);
-//    }
-//
-//public void renderStick(GraphicsContext gc) {
-//    if (isExtending) {
-//        gc.setFill(Color.BLACK);
-//        gc.fillRect(x + 20, y - stick.getLength() + CHARACTER_HEIGHT / 2, 5, stick.getLength());
-//        retrievex=x;
-//        retreivelength=stick.getLength();
-//    } else {
-//
-//        gc.setFill(Color.GREEN);
-//        gc.fillRect(retrievex+20, 395, retreivelength, 5);
-//    }
-//}
     public void stopStick() {
         stick.stopExtension();
         stickLength = stick.retrieveExtendedLength();
@@ -180,7 +161,6 @@ public class StickHeroCharacter {
     }
 
     public void revive() {
-        // Handle revival logic
     }
     public void updateStickLength() {
         stickLength = stick.getLength();
@@ -200,12 +180,12 @@ public class StickHeroCharacter {
 
     public void moveCharacterTo(double xPosition, double yPosition, GraphicsContext gc) {
 
-//            x = xPosition+10; // Update the character's x position
-//            y = yPosition; // Update the character's y position
-//            isFlipped = false;
-            isExtending = false;
-            stickLength = 0; // Reset the stick length
-            isFalling = false;
+           x = xPosition+10; 
+           y = yPosition;
+           isFlipped = false;
+           isExtending = false;
+           stickLength = 0;
+           isFalling = false;
 
     }
     public static boolean isJumping = false;
@@ -214,50 +194,44 @@ public class StickHeroCharacter {
 
     public void jump() {
         if (!isJumping) {
-            // Save the initial Y position before jumping
             initialY = getY();
-            // Set the character's Y position to simulate a jump
             setY(getY() - 30);
             isJumping = true;
         } else {
-            // Set the character's Y position back to the initial position
             setY(getY());
             isJumping = false;
         }
     }
 
     public void fallCharacterTo(double xPosition, double yPosition,GraphicsContext gc) {
-            x = xPosition+15; // Update the character's x position
-            y = yPosition; // Update the character's y position
-//        isFlipped = false;
+        x = xPosition+15;
+        y = yPosition;
         isExtending = false;
-        stickLength = 0; // Reset the stick length
+        stickLength = 0;
         isFalling = false;
 
     }
     public void setFlipped(boolean flipped) {
         isFlipped = flipped;
 
-        double yOffset = 50.0; // Set the desired downward movement
+        double yOffset = 50.0;
 
         if (flipped) {
             characterImage = new Image("C:\\Users\\shaur\\Downloads\\sticknewest_f1_prev_ui.png");
-            y += yOffset; // Move character downwards
+            y += yOffset;
         } else {
             characterImage = new Image("file:/C:/Users/shaur/Desktop/sticknewest.png");
-            y -= yOffset; // Move character upwards (assuming it moved downwards before)
+            y -= yOffset;
         }
     }
-
 
     public Image getCharacterImage() {
         return characterImage;
     }
     public void resetStick() {
-        stick.reset(); // Reset any parameters related to the stick's extension
-        stickLength = 0; // Reset the stick length to zero
+        stick.reset();
+        stickLength = 0;
     }
-
 
 }
 
