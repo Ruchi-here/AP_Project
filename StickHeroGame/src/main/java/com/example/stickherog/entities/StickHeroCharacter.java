@@ -74,7 +74,6 @@ public class StickHeroCharacter {
             if (retreivelength > 0) {
                 double targetX = retreivelength+retrievex+15;
                 stopStick();
-                // Calculate the stick's end X-coordinate
                 if(x<targetX) {
                     ismoving=true;
                     x += 100 * deltaTime;
