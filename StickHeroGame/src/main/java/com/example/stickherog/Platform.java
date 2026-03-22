@@ -42,20 +42,16 @@ public class Platform {
     }
 
 
-//    public void render(GraphicsContext gc) {
-//        // Implement rendering logic for the platform
-//
-//        gc.fillRect(x, y, width, height);
-//    }
+   public void render(GraphicsContext gc) {
+       gc.fillRect(x, y, width, height);
+    }
  public void render(GraphicsContext gc, double cameraOffset) {
-    gc.setFill(Color.BLACK); // Adjust color as needed
+    gc.setFill(Color.BLACK);
     gc.fillRect(x + cameraOffset, y, width, height);
-}
+    }
 
-//    public void shiftX(double shiftAmount) {
-//        x += shiftAmount;
-//    }
-
-
+   public void shiftX(double shiftAmount) {
+       x += shiftAmount;
+   }
 
 }
