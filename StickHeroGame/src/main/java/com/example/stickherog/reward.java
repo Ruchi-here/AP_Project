@@ -2,7 +2,7 @@ package com.example.stickherog;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-class reward2 implements renderable {
+class reward implements renderable {
     public double x;
     public double y;
 
